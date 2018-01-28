@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content  %}
-<form type="get" action="." style="margin: 0">
-    <input  id="search_box" type="text" name="search_box"  placeholder="Search...">
-    <button id="search_submit" type="submit">Submit</button>
+<form class="search-form" action="" method="POST">
+  {% csrf_token %}
+  {% for field in form %}
+      {{ field|as_crispy_field  }}
+  {% endfor %}
+  <input id="seatch-for-movie-submit" type="submit" class="save-form btn btn-warning" value="Search" />
 </form>
-
 {% endblock %}
