@@ -2,10 +2,17 @@ from django.urls import path
 from django.conf.urls import url
 from . import views
 
+app_name = 'movie-reviews'
+
 urlpatterns = [
     url(
-    regex=r'',
+    regex=r'^$',
     view=views.SearchFormView.as_view(),
-    name='index'
+    name='movie-search'
+    ),
+    url(
+    regex=r'reviews/(?P<movie_name>[\w-]+)$',
+    view=views.MovieReviewsView.as_view(),
+    name='movie-reviews'
     )
 ]

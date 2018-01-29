@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content  %}
+<a href="{% url 'movie-reviews:movie-search'%}">
+  <button class="btn btn-warning">Search for another movie</button>
+</a>
+{% if movie_name %}
+{{movie_name}} reviews
+{% else %}
+ is not a valid movie name!
+Try again!
+{% endif %}
+
+{% endblock %}

@@ -8,6 +8,7 @@ class AmazonAPIRequest:
     AMAZON_ACCESS_KEY = ''
     AMAZON_SECRET_KEY = ''
     AMAZON_ASSOC_TAG = ''
+
     def __init__(self):
         self.amazon = AmazonAPI(self.AMAZON_ACCESS_KEY,
                                 self.AMAZON_SECRET_KEY,
@@ -16,6 +17,7 @@ class AmazonAPIRequest:
 
     def send_request(self, movie_name=''):
         try:
+            import ipdb; ipdb.set_trace()
             movie = self.amazon.search_n(1, Keywords=movie_name, SearchIndex='All')
         except Exception:
             raise MovieDoesNotExistException(

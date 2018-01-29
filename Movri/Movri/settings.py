@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'crispy_forms',
+
+    'movie_review.apps.MovieReviewConfig',
 ]
 
 LOCAL_APPS = (
