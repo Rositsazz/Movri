@@ -17,11 +17,10 @@ class AmazonAPIRequest:
 
     def send_request(self, movie_name=''):
         try:
-            import ipdb; ipdb.set_trace()
             movie = self.amazon.search_n(1, Keywords=movie_name, SearchIndex='All')
         except Exception:
             raise MovieDoesNotExistException(
                 'This is not a movie name - {movie_name}'.format(
                     movie_name=movie_name))
-        import ipdb; ipdb.set_trace()
+
         return movie[0]
