@@ -1,9 +1,13 @@
 import re
+from datetime import datetime
+from decimal import Decimal
+from .models import Movie, Review as ReviewModel
 
 
 class Review:
-    def __init__(self, review_element):
+    def __init__(self, review_element, movie_name=''):
         self._review_element = review_element
+        self.movie_name = movie_name
 
     @property
     def author(self):
@@ -17,11 +21,24 @@ class Review:
 
     @property
     def date(self):
-        return self._find_element_text_by_selector('review-date')[3:]
+        str_date = self._find_element_text_by_selector('review-date')[3:]
+        return datetime.strptime(str_date, '%d %B %Y').date()
 
     @property
     def text(self):
         return self._find_element_text_by_selector('review-text')
 
+    def create(self):
+        ReviewModel.objects.create(
+            movie=Movie.objects.get(name=self.movie_name),
+            content=self.text,
+            author=self.author,
+            date=self.date,
+            rating=self.rating
+        )
+
     def _find_element_text_by_selector(self, selector):
         return self._review_element.find_class(selector)[0].text_content()
+
+    def __str__(self):
+        return "Review: " + self.text + "\n"

@@ -10,7 +10,7 @@ urlpatterns = [
         name='movie-search'
     ),
     url(
-        regex=r'reviews/(?P<movie_name>[\w-]+)$',
+        regex=r'reviews/(?P<movie_name>[-\'\w ]+)$',
         view=views.MovieReviewsView.as_view(),
         name='movie-reviews'
     )
