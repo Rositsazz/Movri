@@ -6,12 +6,32 @@
 </a>
 {% if movie_name %}
 {{movie_name}} reviews
-<div>
-  {% for review in reviews %}
-    <div style="padding: 15px">Review: {{ review.content }}</div>
-  {% endfor %}
 
+<div style="padding: 20px">
+  POSITIVE SUMMARY
+  {{positive_summary}}
 </div>
+
+<div style="padding: 20px">
+  NEGATIVE SUMMARY
+  {{negative_summary}}
+</div>
+
+<div>
+  positive
+  {% for sentence in positive_sentences %}
+    <div style="padding: 15px">S:{{sentence.polarity}} {{ sentence.str_sentence }}</div>
+  {% endfor %}
+</div>
+
+<div>
+  negative
+  {% for sentence in negative_sentences %}
+    <div style="padding: 15px">S:{{sentence.polarity}} {{ sentence.str_sentence }} </div>
+  {% endfor %}
+</div>
+
+
 {% else %}
  is not a valid movie name!
 Try again!

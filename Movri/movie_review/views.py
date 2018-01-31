@@ -2,10 +2,14 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 
+from gensim.summarization import summarize
+
 from movie_review.forms import SearchForm
 from movie_review.models import Movie, Review
 from movie_review.amazon_api_utils import AmazonAPIRequest, MovieDoesNotExistException
 from movie_review.reviews_parser import ReviewParser
+from movie_review.review_content_splitter import ReviewContentSplitter
+from movie_review.sentence_classifier import SentenceClassifier
 
 
 class IndexView(TemplateView):
@@ -40,7 +44,7 @@ class SearchFormView(FormView):
                 movie.save()
                 parser = ReviewParser(asin=movie.asin, name=movie.name)
                 most_recent_reviews = parser.most_recent_reviews(
-                    number_of_reviews=100)
+                    number_of_reviews=300)
                 parser.create_review_objects(most_recent_reviews)
             except MovieDoesNotExistException:
                 print('THE MOVIE DOES NOT EXIST')
@@ -53,6 +57,27 @@ class MovieReviewsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['movie_name'] = self.kwargs['movie_name']
-        movie = Movie.objects.get(name=self.kwargs['movie_name'])
-        context['reviews'] = Review.objects.filter(movie=movie)
+        import ipdb; ipdb.set_trace()
+        movie = Movie.objects.get(name=self.kwargs['movie_name'].lower())
+        reviews = Review.objects.filter(movie=movie)
+        for r in reviews:
+            print(r.rating)
+            print(r.content)
+        context['reviews'] = reviews
+        # import ipdb; ipdb.set_trace()
+        all_sentences = self._get_reviews_sentences(reviews)
+        # import ipdb; ipdb.set_trace()
+        sentence_classifier = SentenceClassifier(all_sentences)
+
+        context['positive_sentences'] = sentence_classifier.positive
+        context['negative_sentences'] = sentence_classifier.negative
+        context['positive_summary'] = summarize("".join(sentence_classifier.positive_raw_string), ratio=0.05)
+        context['negative_summary'] = summarize("".join(sentence_classifier.negative_raw_string), ratio=0.05)
         return context
+
+    def _get_reviews_sentences(self, reviews):
+        result = []
+        for r in reviews:
+            # import ipdb; ipdb.set_trace()
+            result.extend(ReviewContentSplitter(r).sentences)
+        return result
