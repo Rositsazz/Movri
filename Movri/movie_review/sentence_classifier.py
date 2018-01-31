@@ -41,4 +41,6 @@ class SentenceClassifier:
             else:
                 self._negative.append(sentence)
 
+            if sentence.polarity > 0.8 or sentence.polarity < -0.6:
+                self._classifier.update_train_set(sentence)
             # self._classifier.update_train_set(sentence)
