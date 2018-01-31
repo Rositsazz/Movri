@@ -14,7 +14,8 @@ class ReviewParser:
     def reviews_url(self):
         SORT_OPTION = 'sortBy=recent'
         PAGE_SIZE = 'pageSize=50'
-        return self.AMAZON_DOMAIN + 'reviews/' + self._asin + '/ref=cm_cr_arp_d_viewopt_srt?' + PAGE_SIZE + '&' + SORT_OPTION
+        PARAM = '/ref=cm_cr_arp_d_viewopt_srt?' + PAGE_SIZE + '&' + SORT_OPTION
+        return self.AMAZON_DOMAIN + 'reviews/' + self._asin + PARAM
 
     def _get_reviews_per_page_html(self, page_number):
         page_tree = self._page_tree(page_number=page_number)
@@ -44,7 +45,8 @@ class ReviewParser:
         if number_of_pages > 1:
             for i in range(2, number_of_pages + 1):
                 if len(review_objects) < reviews_count:
-                    reviews_per_page = self._get_reviews_per_page_html(page_number=i)
+                    reviews_per_page = self._get_reviews_per_page_html(
+                        page_number=i)
                     review_objects.extend(reviews_per_page)
 
         return review_objects

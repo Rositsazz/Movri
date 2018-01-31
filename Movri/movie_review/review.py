@@ -1,6 +1,6 @@
 import re
 from datetime import datetime
-from decimal import Decimal
+
 from .models import Movie, Review as ReviewModel
 
 

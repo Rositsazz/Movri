@@ -6,7 +6,8 @@ from gensim.summarization import summarize
 
 from movie_review.forms import SearchForm
 from movie_review.models import Movie, Review
-from movie_review.amazon_api_utils import AmazonAPIRequest, MovieDoesNotExistException
+from movie_review.amazon_api_utils import (AmazonAPIRequest,
+                                           MovieDoesNotExistException)
 from movie_review.reviews_parser import ReviewParser
 from movie_review.review_content_splitter import ReviewContentSplitter
 from movie_review.sentence_classifier import SentenceClassifier
@@ -71,8 +72,10 @@ class MovieReviewsView(TemplateView):
 
         context['positive_sentences'] = sentence_classifier.positive
         context['negative_sentences'] = sentence_classifier.negative
-        context['positive_summary'] = summarize("".join(sentence_classifier.positive_raw_string), ratio=0.05)
-        context['negative_summary'] = summarize("".join(sentence_classifier.negative_raw_string), ratio=0.05)
+        context['positive_summary'] = summarize("".join(
+            sentence_classifier.positive_raw_string), ratio=0.05)
+        context['negative_summary'] = summarize("".join(
+            sentence_classifier.negative_raw_string), ratio=0.05)
         return context
 
     def _get_reviews_sentences(self, reviews):

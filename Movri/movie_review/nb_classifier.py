@@ -16,7 +16,9 @@ class NBClassifier:
     def _save_data_to_file(self):
         TEXT = "{\"text\":\""
         LABEL = "\", \"label\":\""
-        dict_str = ",\n".join([str(TEXT + str(el[0]) + LABEL + str(el[1])+ "\"}") for el in self._cl.train_set])
+        dict_str = ",\n".join(
+            [str(TEXT + str(el[0]) + LABEL + str(el[1]) + "\"}")
+             for el in self._cl.train_set])
         f = open(self._train_data_file, 'r+')
         f.write("[" + dict_str + "]")
         f.close()

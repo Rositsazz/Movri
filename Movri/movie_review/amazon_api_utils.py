@@ -17,7 +17,9 @@ class AmazonAPIRequest:
 
     def send_request(self, movie_name=''):
         try:
-            movie = self.amazon.search_n(1, Keywords=movie_name, SearchIndex='All')
+            movie = self.amazon.search_n(1,
+                                         Keywords=movie_name,
+                                         SearchIndex='All')
         except Exception:
             raise MovieDoesNotExistException(
                 'This is not a movie name - {movie_name}'.format(

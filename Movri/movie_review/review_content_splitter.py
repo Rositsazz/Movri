@@ -3,6 +3,7 @@ import re
 
 class ReviewContentSplitter:
     regex = r"[.?!]"
+
     def __init__(self, review):
         self.review = review
 
