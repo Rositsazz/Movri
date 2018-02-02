@@ -1,36 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content  %}
-<a href="{% url 'movie-reviews:movie-search'%}">
-  <button class="btn btn-warning">Search for another movie</button>
-</a>
-{% if movie_name %}
-{{movie_name}} reviews
-
-<div style="padding: 20px">
-  POSITIVE SUMMARY
-  {{positive_summary}}
+<div class="movie-container">
+  <a href="{% url 'movie-reviews:movie-search'%}" class="back-button">
+    <i class="back-arrow fas fa-arrow-circle-left fa-2x"></i>
+  </a>
+  {% if movie_name %}
+    <div class="movie-name">
+    {{movie_name}}
+  </div>
 </div>
+<div class="reviews">
+  <div class="positive-reviews">
+    <div class="summary">Positive Summary</div>
+    {{positive_summary}}
+  </div>
 
-<div style="padding: 20px">
-  NEGATIVE SUMMARY
-  {{negative_summary}}
+  <div class="negative-reviews">
+    <div class="summary">Negative Summary</div>
+    {{negative_summary}}
+  </div>
 </div>
-
-<div>
-  positive
-  {% for sentence in positive_sentences %}
-    <div style="padding: 15px">S:{{sentence.polarity}} {{ sentence.str_sentence }}</div>
-  {% endfor %}
-</div>
-
-<div>
-  negative
-  {% for sentence in negative_sentences %}
-    <div style="padding: 15px">S:{{sentence.polarity}} {{ sentence.str_sentence }} </div>
-  {% endfor %}
-</div>
-
 
 {% else %}
  is not a valid movie name!

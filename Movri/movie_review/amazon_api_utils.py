@@ -20,6 +20,7 @@ class AmazonAPIRequest:
             movie = self.amazon.search_n(1,
                                          Keywords=movie_name,
                                          SearchIndex='DVD')
+            print("Movie found in Amazon")
         except Exception:
             raise MovieDoesNotExistException(
                 'This is not a movie name - {movie_name}'.format(

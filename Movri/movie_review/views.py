@@ -33,14 +33,13 @@ class SearchFormView(FormView):
     def form_valid(self, form):
         name = self.request.POST['movie_name']
         self.kwargs['movie_name'] = name
-
-        movie, created = Movie.objects.get_or_create(name=name.lower())
+        movie, created = Movie.objects.get_or_create(name=name.strip().lower())
         if created:
             try:
                 amazon_api = AmazonAPIRequest()
                 movie_data = amazon_api.send_request(movie_name=name)
                 movie.asin = movie_data.asin
-                movie.name = movie_data.title.lower()
+                movie.name = movie_data.title.lower().split("[")[0].strip()
                 movie.reviews_url = movie_data.reviews[1]
                 movie.save()
                 parser = ReviewParser(asin=movie.asin, name=movie.name)
@@ -49,6 +48,9 @@ class SearchFormView(FormView):
                 parser.create_review_objects(most_recent_reviews)
             except MovieDoesNotExistException:
                 print('THE MOVIE DOES NOT EXIST')
+        if movie.name == self.kwargs['movie_name'].lower():
+            self.kwargs["movie_name"] = movie.name
+
         return super().form_valid(form)
 
 
@@ -57,30 +59,30 @@ class MovieReviewsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['movie_name'] = self.kwargs['movie_name']
-        import ipdb; ipdb.set_trace()
-        movie = Movie.objects.get(name=self.kwargs['movie_name'].lower())
-        reviews = Review.objects.filter(movie=movie)
-        for r in reviews:
-            print(r.rating)
-            print(r.content)
-        context['reviews'] = reviews
-        # import ipdb; ipdb.set_trace()
-        all_sentences = self._get_reviews_sentences(reviews)
-        # import ipdb; ipdb.set_trace()
-        sentence_classifier = SentenceClassifier(all_sentences)
+        context['movie_name'] = self.kwargs['movie_name'].title()
+        movie = Movie.objects.filter(name__contains=self.kwargs['movie_name'].lower())[0]
+        # movie = Movie.objects.get(name=self.kwargs['movie_name'].lower())
+        if movie.positive_reviews not in ['', None]:
+            context['positive_summary'] = movie.positive_reviews
+            context['negative_summary'] = movie.negative_reviews
+        else:
 
-        context['positive_sentences'] = sentence_classifier.positive
-        context['negative_sentences'] = sentence_classifier.negative
-        context['positive_summary'] = summarize("".join(
-            sentence_classifier.positive_raw_string), ratio=0.05)
-        context['negative_summary'] = summarize("".join(
-            sentence_classifier.negative_raw_string), ratio=0.05)
+            reviews = Review.objects.filter(movie=movie)
+            all_sentences = self._get_reviews_sentences(reviews)
+            sentence_classifier = SentenceClassifier(all_sentences)
+            context['positive_sentences'] = sentence_classifier.positive
+            context['negative_sentences'] = sentence_classifier.negative
+            context['positive_summary'] = summarize(" ".join(
+                sentence_classifier.positive_raw_string), ratio=0.05)
+            context['negative_summary'] = summarize(" ".join(
+                sentence_classifier.negative_raw_string), ratio=0.05)
+            movie.positive_reviews = context['positive_summary']
+            movie.negative_reviews = context['negative_summary']
+            movie.save()
         return context
 
     def _get_reviews_sentences(self, reviews):
         result = []
         for r in reviews:
-            # import ipdb; ipdb.set_trace()
             result.extend(ReviewContentSplitter(r).sentences)
         return result

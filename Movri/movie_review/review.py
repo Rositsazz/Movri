@@ -30,7 +30,7 @@ class Review:
 
     def create(self):
         ReviewModel.objects.create(
-            movie=Movie.objects.get(name=self.movie_name),
+            movie=Movie.objects.filter(name=self.movie_name)[0],
             content=self.text,
             author=self.author,
             date=self.date,

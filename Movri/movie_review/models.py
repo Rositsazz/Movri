@@ -8,6 +8,8 @@ class Movie(models.Model):
     reviews_url = models.URLField(blank=True)
     asin = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
+    positive_reviews = models.TextField(null=True, blank=True)
+    negative_reviews = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.asin + ' - ' + self.name

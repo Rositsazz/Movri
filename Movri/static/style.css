@@ -1,0 +1,80 @@
+.search-form-container {
+  width: 600px;
+  position: fixed;
+  left: 50%;
+  top:50%;
+  margin-left: -300px;
+  margin-top: -50px;
+}
+
+.search-form-container input{
+  width: 450px;
+  padding: 5px 15px;
+  border-radius: 10px;
+  border: 1px solid silver;
+  float: left;
+}
+
+.search-form-container input[type="submit"]{
+  width: 110px;
+  float: left;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.movie-container {
+  display: flex;
+  margin-top: 20px;
+}
+
+
+.movie-container .movie-name{
+  flex: 1;
+  display: block;
+  text-align: left;
+  font-size: 40px;
+  color: #f90;
+  margin-left: -13%;
+}
+
+.reviews{
+  display: flex;
+  height: 80vh;
+}
+
+.reviews .positive-reviews{
+  flex: 1;
+  padding: 10px 20px 20px 10px;
+  border: 1px solid silver;
+  margin: 20px;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+}
+
+.reviews .negative-reviews{
+  flex: 1;
+  padding: 10px 20px 20px 10px;
+  border: 1px solid silver;
+  margin: 20px;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+
+}
+
+.reviews .summary{
+  font-size: 20px;
+  font-weight:600;
+  color: #f90;
+}
+
+.back-button{
+  color: orange;
+  margin-top: 18px;
+  margin-left: 20px;
+  flex: 1;
+  display:inline-block;
+}
+
+a:hover {
+  color: silver;
+}
